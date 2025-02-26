@@ -1,4 +1,4 @@
-public class FamilyDataPintar {
+public class FamilyDataImprimirPersona {
     public static void main(String[] args) {
         if (args.length == 7) {
             // Imprimir el nombre del padre
