@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.util.Random;
 import javax.swing.*;
+import javax.swing.border.Border;
+
 
 public class PiedraPapelTijera_ui extends JFrame {
     private final JButton piedraButton;
@@ -22,9 +24,9 @@ public class PiedraPapelTijera_ui extends JFrame {
         buttonPanel.setLayout(new FlowLayout());
 
         // Initialize the buttons
-        piedraButton = new JButton("PIEDRA");
-        papelButton = new JButton("PAPEL");
-        tijeraButton = new JButton("TIJERA");
+        piedraButton = new RoundedButton("PIEDRA", Color.RED);
+        papelButton = new RoundedButton("PAPEL", Color.GREEN);
+        tijeraButton = new RoundedButton("TIJERA", Color.BLUE);
 
         // Set button sizes
         Dimension buttonSize = new Dimension(100, 100);
@@ -32,12 +34,18 @@ public class PiedraPapelTijera_ui extends JFrame {
         papelButton.setPreferredSize(buttonSize);
         tijeraButton.setPreferredSize(buttonSize);
 
+        // Set button form
+        piedraButton.setBorder(new RoundedBorder(20));
+        papelButton.setBorder(new RoundedBorder(20));
+        tijeraButton.setBorder(new RoundedBorder(20));
+
         // Set button colors
         piedraButton.setBackground(Color.RED);
         papelButton.setBackground(Color.GREEN);
         tijeraButton.setBackground(Color.BLUE);
 
         // Set text colors
+        papelButton.setForeground(Color.BLACK);
         piedraButton.setForeground(Color.WHITE);
         tijeraButton.setForeground(Color.WHITE);
 
@@ -115,5 +123,54 @@ public class PiedraPapelTijera_ui extends JFrame {
     // Main method to run the application
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new PiedraPapelTijera_ui().setVisible(true));
+    }
+
+
+    // Define the RoundedButton class
+    private static class RoundedButton extends JButton {
+        private final Color backgroundColor;
+
+        RoundedButton(String text, Color backgroundColor) {
+            super(text);
+            this.backgroundColor = backgroundColor;
+            setContentAreaFilled(false);
+            setBorder(new RoundedBorder(20));
+            setForeground(Color.WHITE);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            if (getModel().isArmed()) {
+                g.setColor(backgroundColor.darker());
+            } else {
+                g.setColor(backgroundColor);
+            }
+            g.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+            super.paintComponent(g);
+        }
+    }
+
+    // Define the RoundedBorder class
+    private static class RoundedBorder implements Border {
+        private final int radius;
+
+        RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.radius + 1, this.radius + 1, this.radius + 2, this.radius);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return true;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+        }
     }
 }
